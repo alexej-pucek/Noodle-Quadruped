@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES
 #include "ik.h"
 #include "utils.h"
+#include "lidar.h"
 
 float x{};
 float yz{};
@@ -12,9 +13,11 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("ESP32 Connected");
+  lidarsetup();
 }
 
 void loop() {
+  lidarloop();
   while (true)
 	{
 		Serial.println("X:");

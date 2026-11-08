@@ -24,7 +24,7 @@ bool solveIK(float x, float z, float yz)
 	float k{ radToDeg(kl) + 90 };
 	
 	float D{ sqrt((x * x) + (z1 * z1)) };
-	//std::cout << "D: " << D << '\n';
+	
 	
 	if (D > 150)
 	{
@@ -32,32 +32,32 @@ bool solveIK(float x, float z, float yz)
 	}
 
 	float a{ acos(((L2 * L2) + ((L3 - 30) * (L3 - 30)) - (D * D)) / (2 * L2 * (L3 - 30))) };
-	//std::cout << "a: " << a << '\n';
+	
 	float b{ atan2(z1,x) };
-	//std::cout << "b: " << b << '\n';
+	
 	float y{ acos(((D * D) + (L2 * L2) - ((L3 - 30) * (L3 - 30))) / (2 * D * L2)) };
-	//std::cout << "y: " << y << '\n';
+	
 	float g{ b + y };
-	//std::cout << "g: " << g << '\n';
+	
 
 	float Kx{ L2 * cos(g) };
-	//std::cout << "Kx: " << Kx << '\n';
+	
 	float Kz{ L2 * sin(g) };
-	//std::cout << "Kz: " << Kz << '\n';
+	
 	float n{ a + Tr };
-	//std::cout << "n: " << n << '\n';
+	
 	float Tx{ R5 * cos(n) };
-	//std::cout << "Tx: " << Tx << '\n';
+	
 	float Tz{ R5 * sin(n) };
-	//std::cout << "Tz: " << Tz << '\n';
+	
 	float B{ sqrt(((Tx - Sx) * (Tx - Sx)) + ((Tz - Sz) * (Tz - Sz))) };
-	//std::cout << "B: " << B << '\n';
+	
 	float o{ acos(((R1 * R1) + (B * B) - (R2 * R2)) / (2 * R1 * B)) };
-	//std::cout << "o: " << o << '\n';
+	
 	float f{ atan2(Tx, Tz) };
-	//std::cout << "f: " << f << '\n';
+	
 	float q{ f + o };
-	//std::cout << "q: " << q << '\n';
+	
 	
 	if (g < -90.0f || g > 90.0f || q < -90.0f || q > 90.0f)
 	{
