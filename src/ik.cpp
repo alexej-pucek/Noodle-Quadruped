@@ -1,32 +1,8 @@
 #include <Arduino.h>
 #include <cmath>
 #define _USE_MATH_DEFINES
-
-float readFloat() {
-    while (true) {
-        if (Serial.available() > 0) {
-            String input = Serial.readStringUntil('\n');
-            input.trim();
-            
-            if (input.length() > 0) {
-                return input.toFloat();
-            }
-        }
-    }
-}
-
-float radToDeg(float rad)
-{
-	return 180 / pi * rad;
-}
-
-float pi{M_PI};
-float Servo1{};
-float Servo2{};
-float Servo3{};
-float x{};
-float z{};
-float yz{};
+#include "ik.h"
+#include "utils.h"
 
 const float Dy{34.7f};
 const float R1{ 40.105f };
@@ -38,6 +14,8 @@ const float L3{ 130.0f };
 const float Sx{ 22.0f };
 const float Sz{ 20.3f };
 const float Tr{ asin( (14.314f / 2) / 30.0f) };
+
+ServoData servos{0.0f, 0.0f, 0.0f};
 
 bool solveIK(float x, float z, float yz)
 {
@@ -91,34 +69,12 @@ bool solveIK(float x, float z, float yz)
 		return false;
 	}
 	
+	servos.servo1 = radToDeg(g);
+	servos.servo2 = radToDeg(q);
+	servos.servo3 = k;
 
-
-	Servo1 = radToDeg(g);
-	Servo2 = radToDeg(q);
-	Servo3 = k;
 	return true;
 }
 
-int main()
-{
-	while (true)
-	{
-		Serial.println("X:");
-		x = readFloat();
-		Serial.println("Y: ");
-		yz = readFloat();
-		Serial.println("Z: ");
-		z = readFloat();
-		
-		if (solveIK(x,z,yz))
-		{
-			std::cout << "Servo1: " << Servo1 << " Servo2: " << Servo2 << "Servo3: " << Servo3 << '\n';
-		}
-		
-		else
-		{
-			std::cout << "Unable to calculate, try different.\n";
-		}
-	}
-}
+
 
