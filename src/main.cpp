@@ -4,13 +4,24 @@
 #include "ik.h"
 #include "utils.h"
 #include "lidar.h"
+#include "gait.h"
 
+float t{stepLength(time)};
 float x{};
 float yz{};
 float z{};
+unsigned long time{1000};
+float P0x{};
+float P1x{};
+float P2x{};
+float P3x{};
+float P0z{};
+float P1z{};
+float P2z{};
+float P3z{};
 
 void setup() {
-  Serial.begin(115200);
+  Serial1.begin(115200, SERIAL_8N1, 5,4);
   delay(1000);
   Serial.println("ESP32 Connected");
   lidarsetup();
@@ -18,28 +29,38 @@ void setup() {
 
 void loop() {
   lidarloop();
-  while (true)
+  
+
+	Serial.println("X:");
+	x = readFloat();
+	Serial.println("Y: ");
+	yz = readFloat();
+	Serial.println("Z: ");
+	z = readFloat();
+		
+	if (solveIK(x,z,yz))
 	{
-		Serial.println("X:");
-		x = readFloat();
-		Serial.println("Y: ");
-		yz = readFloat();
-		Serial.println("Z: ");
-		z = readFloat();
+		Serial.print( "Servo1: ");
+		Serial.println( servos.servo1);
+		Serial.print( "Servo2: ");
+		Serial.println( servos.servo2);
+		Serial.print( "Servo3: ");
+		Serial.println( servos.servo3);
+	}
 		
-		if (solveIK(x,z,yz))
-		{
-			Serial.print( "Servo1: ");
-			Serial.println( servos.servo1);
-			Serial.print( "Servo2: ");
-			Serial.println( servos.servo2);
-			Serial.print( "Servo3: ");
-			Serial.println( servos.servo3);
-		}
-		
-		else
-		{
-			Serial.println("Unable to calculate, try different.\n");
-		}
+	else
+	{
+		Serial.println("Unable to calculate, try different.\n");
+	}
+	
+	t = stepLength(time);
+	if(t < 0.5){
+		float tB{t * 2}; 
+		float servoAngle{solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), yz)};
+
+	}
+	else if(t >= 0.5){
+		float tI{(t - 0.5) * 2};
+		float servoAngle{solveIK(linearInterpolation(tI,P3x, P0x), P0z, yz)};
 	}
 }

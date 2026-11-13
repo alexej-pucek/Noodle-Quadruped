@@ -75,6 +75,3 @@ bool solveIK(float x, float z, float yz)
 
 	return true;
 }
-
-
-
