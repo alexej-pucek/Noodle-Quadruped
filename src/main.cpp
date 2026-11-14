@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 #include <cmath>
 #define _USE_MATH_DEFINES
 #include "ik.h"
@@ -25,6 +27,10 @@ void setup() {
   delay(1000);
   Serial.println("ESP32 Connected");
   lidarsetup();
+  pwm.begin();
+  pwm.setOscillatorFrequency(27000000);
+  pwm.setPWMFreq(SERVO_FREQUENCY);
+  delay(10);
 }
 
 void loop() {
@@ -55,7 +61,9 @@ void loop() {
 		float tB{t * 2}; 
 		swing = {solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), yz)};
 		if(swing){
-			//write angles to servos
+			setServoAngle(0,servos.servo1);
+			setServoAngle(1,servos.servo2);
+			setServoAngle(2,servos.servo3);
 		}
 
 	}
@@ -63,7 +71,9 @@ void loop() {
 		float tI{(t - 0.5) * 2};
 		stance = {solveIK(linearInterpolation(tI,P3x, P0x), P0z, yz)};
 		if(stance){
-			//write angles to servos
+			setServoAngle(0,servos.servo1);
+			setServoAngle(1,servos.servo2);
+			setServoAngle(2,servos.servo3);
 		}
 	}
 }
