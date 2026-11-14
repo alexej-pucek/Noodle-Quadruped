@@ -4,8 +4,8 @@
 #include "ik.h"
 #include "utils.h"
 #include "gait.h"
-bool swing{};
-bool stance{};
+bool swing{0};
+bool stance{0};
 
 float stepLength(unsigned long stepTime){
     float phase{(millis() % stepTime) / (float)stepTime};

@@ -25,8 +25,8 @@ float readFloat() {
     }
 }
 
-void setServoAngle(uint8_t channel, int angle){
+ /*void setServoAngle(uint8_t channel, int angle){
     angle = {constrain(angle,0,180)};
     int pulse{map(angle, 0, 180, SERVOMIN, SERVOMAX)};
     pwm.setPWM(channel, 0, pulse);
-}
+}*/

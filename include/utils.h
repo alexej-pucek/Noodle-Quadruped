@@ -4,10 +4,10 @@
 #define SERVOMAX 510
 #define SERVO_FREQUENCY 50
 
-Adafruit_PWMServoDriver pwm{Adafruit_PWMServoDriver(0x40)};
+// extern Adafruit_PWMServoDriver pwm;
 
-extern bool swing{};
-extern bool stance{};
+extern bool swing;
+extern bool stance;
 
 void setServoAngle(uint8_t channel, int angle);
 float radToDeg(float rad);
