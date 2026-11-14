@@ -6,11 +6,11 @@
 #include "lidar.h"
 #include "gait.h"
 
-float t{stepLength(time)};
+unsigned long stepTime{1000}; //step length in milliseconds
+float t{stepLength(stepTime)};
 float x{};
 float yz{};
 float z{};
-unsigned long time{1000};
 float P0x{};
 float P1x{};
 float P2x{};
@@ -28,9 +28,8 @@ void setup() {
 }
 
 void loop() {
-  lidarloop();
+	lidarloop();
   
-
 	Serial.println("X:");
 	x = readFloat();
 	Serial.println("Y: ");
@@ -38,8 +37,7 @@ void loop() {
 	Serial.println("Z: ");
 	z = readFloat();
 		
-	if (solveIK(x,z,yz))
-	{
+	if (solveIK(x,z,yz)){
 		Serial.print( "Servo1: ");
 		Serial.println( servos.servo1);
 		Serial.print( "Servo2: ");
@@ -48,19 +46,24 @@ void loop() {
 		Serial.println( servos.servo3);
 	}
 		
-	else
-	{
+	else{
 		Serial.println("Unable to calculate, try different.\n");
 	}
 	
-	t = stepLength(time);
+	t = stepLength(stepTime);
 	if(t < 0.5){
 		float tB{t * 2}; 
-		float servoAngle{solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), yz)};
+		swing = {solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), yz)};
+		if(swing){
+			//write angles to servos
+		}
 
 	}
 	else if(t >= 0.5){
 		float tI{(t - 0.5) * 2};
-		float servoAngle{solveIK(linearInterpolation(tI,P3x, P0x), P0z, yz)};
+		stance = {solveIK(linearInterpolation(tI,P3x, P0x), P0z, yz)};
+		if(stance){
+			//write angles to servos
+		}
 	}
 }

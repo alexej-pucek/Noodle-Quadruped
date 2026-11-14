@@ -4,6 +4,8 @@
 #include "ik.h"
 #include "utils.h"
 
+// Parallelogram Linkage Leg Parameters
+
 const float Dy{34.7f};
 const float R1{ 40.105f };
 const float R2{ 27.113f };
@@ -19,16 +21,16 @@ ServoData servos{0.0f, 0.0f, 0.0f};
 
 bool solveIK(float x, float z, float yz)
 {
+	// Y-axis movement
 	float z1{ sqrt((yz * yz) + (z * z)) };
 	float kl{ atan(yz / z) };
-	float k{ radToDeg(kl) + 90 };
+	float k{ radToDeg(kl) + 90 }; // Y Servo Angle in Degrees
 	
+	// Servo1(Bottom X,Z-axis) Movement
 	float D{ sqrt((x * x) + (z1 * z1)) };
 	
-	
-	if (D > 150)
-	{
-		return false;
+	if (D > 150){
+		return false; // Leg Reach Checke
 	}
 
 	float a{ acos(((L2 * L2) + ((L3 - 30) * (L3 - 30)) - (D * D)) / (2 * L2 * (L3 - 30))) };
@@ -37,9 +39,9 @@ bool solveIK(float x, float z, float yz)
 	
 	float y{ acos(((D * D) + (L2 * L2) - ((L3 - 30) * (L3 - 30))) / (2 * D * L2)) };
 	
-	float g{ b + y };
-	
+	float g{ b + y }; // Servo1 (Bottom) Angle in Radians	
 
+	// Servo2 (Top X,Z-axis) Movement
 	float Kx{ L2 * cos(g) };
 	
 	float Kz{ L2 * sin(g) };
@@ -56,16 +58,19 @@ bool solveIK(float x, float z, float yz)
 	
 	float f{ atan2(Tx, Tz) };
 	
-	float q{ f + o };
+	float q{ f + o }; // Servo2 (Top) Angle in Radians
 	
 	
-	if (g < -90.0f || g > 90.0f || q < -90.0f || q > 90.0f)
-	{
+	if (g < -90.0f || g > 90.0f || q < -90.0f || q > 90.0f){
 		return false;
 	}
 
-	if (g - q >= 60)
-	{
+	if (std::isnan(g) || std::isnan(q) || std::isnan(k) ){
+		Serial.println("Error at calculating IK, value NaN appeared.");
+		return false;
+	}
+
+	if (g - q >= 60){
 		return false;
 	}
 	
