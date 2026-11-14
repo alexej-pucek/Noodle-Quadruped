@@ -14,14 +14,14 @@ float t{stepLength(stepTime)};
 float yz{};
 float z{};*/
 float y{0};
-float P0x{}; // Step P0 Swing, Stance X-axis
-float P1x{}; // Step P1 Swing X-axis
-float P2x{}; // Step P2 Swing X-axis
-float P3x{}; // Step P3 Swing, Stance X-axis
-float P0z{}; // Step P0 Swing Z-axis
-float P1z{}; // Step P1 Swing Z-axis
-float P2z{}; // Step P2 Swing Z-axis
-float P3z{}; // Step P3 Swing Z-axis
+float P0x{50}; // Step P0 Swing, Stance X-axis
+float P1x{20}; // Step P1 Swing X-axis
+float P2x{0}; // Step P2 Swing X-axis
+float P3x{-30}; // Step P3 Swing, Stance X-axis
+float P0z{140}; // Step P0 Swing Z-axis
+float P1z{120}; // Step P1 Swing Z-axis
+float P2z{120}; // Step P2 Swing Z-axis
+float P3z{140}; // Step P3 Swing Z-axis
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
@@ -62,6 +62,7 @@ void loop() {
 	
 	t = stepLength(stepTime);
 	if(t < 0.5){
+		Serial.println("Swing");
 		float tB{t * 2}; 
 		swing = {solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), y)};
 		if(swing){
@@ -78,6 +79,7 @@ void loop() {
 
 	}
 	else if(t >= 0.5){
+		Serial.println("Stance");
 		float tI{(t - 0.5) * 2};
 		stance = {solveIK(linearInterpolation(tI,P3x, P0x), P0z, y)};
 		if(stance){

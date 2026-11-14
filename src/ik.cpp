@@ -61,7 +61,7 @@ bool solveIK(float x, float z, float yz)
 	float q{ f + o }; // Servo2 (Top) Angle in Radians
 	
 	
-	if (radToDeg(g) < -90.0f || radToDeg(g) > 90.0f || radToDeg(q) < -90.0f || radToDeg(q) > 90.0f){
+	if (radToDeg(g) - 90 < -90.0f || radToDeg(g) - 90 > 90.0f || radToDeg(q) < -90.0f || radToDeg(q) > 90.0f){
 		return false;
 	}
 
@@ -70,11 +70,11 @@ bool solveIK(float x, float z, float yz)
 		return false;
 	}
 
-	if (radToDeg(g) - radToDeg(q) >= 60){
+	if (radToDeg(g) - 90 - radToDeg(q) >= 60){
 		return false;
 	}
 	
-	servos.servo1 = radToDeg(g);
+	servos.servo1 = radToDeg(g) -90.0f;
 	servos.servo2 = radToDeg(q);
 	servos.servo3 = k;
 
