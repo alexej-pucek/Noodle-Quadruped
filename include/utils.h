@@ -1,5 +1,8 @@
 #pragma once
 
+#include <Arduino.h>
+#include <Adafruit_PWMServoDriver.h>
+
 #define SERVOMIN 110
 #define SERVOMAX 510
 #define SERVO_FREQUENCY 50
