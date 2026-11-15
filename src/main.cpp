@@ -22,6 +22,10 @@ float P0z{140}; // Step P0 Swing Z-axis
 float P1z{120}; // Step P1 Swing Z-axis
 float P2z{120}; // Step P2 Swing Z-axis
 float P3z{140}; // Step P3 Swing Z-axis
+float SwX{};
+float StX{};
+float SwZ{};
+float StZ{};
 
 
 void setup() {
@@ -30,6 +34,7 @@ void setup() {
   delay(1000);
   Serial.println("ESP32 Connected");
   // lidarsetup();
+  Wire.begin(4,5);
   pwm.begin();
   pwm.setOscillatorFrequency(27000000);
   pwm.setPWMFreq(SERVO_FREQUENCY);
@@ -62,35 +67,77 @@ void loop() {
 	t = stepLength(stepTime);
 	if(t < 0.5){
 		Serial.println("Swing");
-		float tB{t * 2}; 
-		swing = {solveIK(bezierCurve(tB, P0x, P1x, P2x, P3x),bezierCurve(tB, P0z, P1z, P2z, P3z), y)};
+		float tB{t * 2};
+		SwX = bezierCurve(tB, P0x, P1x, P2x, P3x);
+		SwZ = bezierCurve(tB, P0z, P1z, P2z, P3z);
+		swing = {solveIK(SwX,SwZ, y)};
 		if(swing){
+			// Front Right Leg
+			/*Serial.print("Swing: ");
+			Serial.print(SwX);
+			Serial.print("   ");
+			Serial.println(SwZ);
 			Serial.print("Swing Servo1: ");
-			Serial.println(servos.servo1);
-			setServoAngle(0,servos.servo1);
+			Serial.println( 80.0f - servos.servo1);
+			setServoAngle(0, 80.0f - servos.servo1);
 			Serial.print("Swing Servo2: ");
-			Serial.println(servos.servo2);
-			setServoAngle(1,servos.servo2);
+			Serial.println(servos.servo2 + 90.0f);
+			setServoAngle(1,servos.servo2 + 90);
 			Serial.print("Swing Servo3: ");
 			Serial.println(servos.servo3);
-			setServoAngle(2,servos.servo3);
+			setServoAngle(2,servos.servo3);*/
+			// Front Left Leg
+			Serial.print("Swing: ");
+			Serial.print(SwX);
+			Serial.print("   ");
+			Serial.println(SwZ);
+			Serial.print("Swing Servo1: ");
+			Serial.println( 200.0f - servos.servo1);
+			setServoAngle(3, 200.0f - servos.servo1);
+			Serial.print("Swing Servo2: ");
+			Serial.println( 90.0f - servos.servo2);
+			setServoAngle(4, 90.0f - servos.servo2);
+			Serial.print("Swing Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(5,servos.servo3);
 		}
 
 	}
 	else if(t >= 0.5){
 		Serial.println("Stance");
 		float tI{(t - 0.5) * 2};
-		stance = {solveIK(linearInterpolation(tI,P3x, P0x), P0z, y)};
+		StX = linearInterpolation(tI,P3x, P0x);
+		StZ = P0z;
+		stance = {solveIK(StX, StZ, y)};
 		if(stance){
+			// Front Right Leg
+			/*Serial.print("Stance: ");
+			Serial.print(StX);
+			Serial.print("   ");
+			Serial.println(StZ);
 			Serial.print("Stance Servo1: ");
-			Serial.println(servos.servo1);
-			setServoAngle(0,servos.servo1);
+			Serial.println(80.0f - servos.servo1);
+			setServoAngle(0, 80.0f - servos.servo1);
 			Serial.print("Stance Servo2: ");
-			Serial.println(servos.servo2);
-			setServoAngle(1,servos.servo2);
+			Serial.println(servos.servo2 + 90);
+			setServoAngle(1,servos.servo2 + 90.0f);
 			Serial.print("Stance Servo3: ");
 			Serial.println(servos.servo3);
-			setServoAngle(2,servos.servo3);
+			setServoAngle(2,servos.servo3);*/
+			// Front Left Leg
+			Serial.print("Stance: ");
+			Serial.print(StX);
+			Serial.print("   ");
+			Serial.println(StZ);
+			Serial.print("Stance Servo1: ");
+			Serial.println(200.0f - servos.servo1);
+			setServoAngle(3, 200.0f - servos.servo1);
+			Serial.print("Stance Servo2: ");
+			Serial.println( 90.0f - servos.servo2);
+			setServoAngle(4, 90.0f - servos.servo2);
+			Serial.print("Stance Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(5,servos.servo3);
 		}
 	}
 }
