@@ -23,7 +23,6 @@ float P1z{120}; // Step P1 Swing Z-axis
 float P2z{120}; // Step P2 Swing Z-axis
 float P3z{140}; // Step P3 Swing Z-axis
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
 void setup() {
   Serial.begin(115200);
@@ -31,10 +30,10 @@ void setup() {
   delay(1000);
   Serial.println("ESP32 Connected");
   // lidarsetup();
-  /*pwm.begin();
+  pwm.begin();
   pwm.setOscillatorFrequency(27000000);
   pwm.setPWMFreq(SERVO_FREQUENCY);
-  delay(10);*/
+  delay(10);
 }
 
 void loop() {
@@ -68,13 +67,13 @@ void loop() {
 		if(swing){
 			Serial.print("Swing Servo1: ");
 			Serial.println(servos.servo1);
-			//setServoAngle(0,servos.servo1);
+			setServoAngle(0,servos.servo1);
 			Serial.print("Swing Servo2: ");
 			Serial.println(servos.servo2);
-			//setServoAngle(1,servos.servo2);
+			setServoAngle(1,servos.servo2);
 			Serial.print("Swing Servo3: ");
 			Serial.println(servos.servo3);
-			//setServoAngle(2,servos.servo3);
+			setServoAngle(2,servos.servo3);
 		}
 
 	}
@@ -85,13 +84,13 @@ void loop() {
 		if(stance){
 			Serial.print("Stance Servo1: ");
 			Serial.println(servos.servo1);
-			//setServoAngle(0,servos.servo1);
+			setServoAngle(0,servos.servo1);
 			Serial.print("Stance Servo2: ");
 			Serial.println(servos.servo2);
-			//setServoAngle(1,servos.servo2);
+			setServoAngle(1,servos.servo2);
 			Serial.print("Stance Servo3: ");
 			Serial.println(servos.servo3);
-			//setServoAngle(2,servos.servo3);
+			setServoAngle(2,servos.servo3);
 		}
 	}
 }

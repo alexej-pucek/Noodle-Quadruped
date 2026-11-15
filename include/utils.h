@@ -4,7 +4,7 @@
 #define SERVOMAX 510
 #define SERVO_FREQUENCY 50
 
-// extern Adafruit_PWMServoDriver pwm;
+extern Adafruit_PWMServoDriver pwm;
 
 extern bool swing;
 extern bool stance;

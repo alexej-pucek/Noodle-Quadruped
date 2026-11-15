@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include "utils.h"
 
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
+
 float pi{M_PI};
 
 float radToDeg(float rad)
@@ -25,8 +27,8 @@ float readFloat() {
     }
 }
 
- /*void setServoAngle(uint8_t channel, int angle){
+void setServoAngle(uint8_t channel, int angle){
     angle = {constrain(angle,0,180)};
     int pulse{map(angle, 0, 180, SERVOMIN, SERVOMAX)};
     pwm.setPWM(channel, 0, pulse);
-}*/
+}
