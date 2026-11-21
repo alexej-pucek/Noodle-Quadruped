@@ -14,7 +14,7 @@ const float L1{ 99.988f };
 const float L2{ 100.0f };
 const float L3{ 130.0f };
 const float Sx{ 22.0f };
-const float Sz{ 20.3f };
+const float Sz{ -20.3f };
 const float Tr{ asin( (14.314f / 2) / 30.0f) };
 
 ServoData servos{0.0f, 0.0f, 0.0f};
@@ -22,41 +22,43 @@ ServoData servos{0.0f, 0.0f, 0.0f};
 bool solveIK(float x, float z, float yz)
 {
 	// Y-axis movement
-	float z1{ sqrt((yz * yz) + (z * z)) };
-	float kl{ atan(yz / z) };
+	float z1{ sqrtf((yz * yz) + (z * z)) };
+	float kl{ atan2f(yz, z) };
 	float k{ radToDeg(kl) + 90 }; // Y Servo Angle in Degrees
 	
 	// Servo1(Bottom X,Z-axis) Movement
-	float D{ sqrt((x * x) + (z1 * z1)) };
+	float D{ sqrtf((x * x) + (z1 * z1)) };
 	
 	if (D > 150){
 		return false; // Leg Reach Checke
 	}
 
-	float a{ acos(((L2 * L2) + ((L3 - 30) * (L3 - 30)) - (D * D)) / (2 * L2 * (L3 - 30))) };
+	float a{ acosf(clamp(((L2 * L2) + ((L3 - 30) * (L3 - 30)) - (D * D)) / (2 * L2 * (L3 - 30)))) };
 	
-	float b{ atan2(z1,x) };
+	float b{ atan2f(z1,x) };
 	
-	float y{ acos(((D * D) + (L2 * L2) - ((L3 - 30) * (L3 - 30))) / (2 * D * L2)) };
+	float y{ acosf(clamp(((D * D) + (L2 * L2) - ((L3 - 30) * (L3 - 30))) / (2 * D * L2))) };
 	
 	float g{ b + y }; // Servo1 (Bottom) Angle in Radians	
 
 	// Servo2 (Top X,Z-axis) Movement
-	float Kx{ L2 * cos(g) };
+	float Kx{ L2 * cosf(g) };
 	
-	float Kz{ L2 * sin(g) };
+	float Kz{ L2 * sinf(g) };
+
+	float e{atan2f(z1 - Kz, x - Kx)};
 	
-	float n{ a + Tr };
+	float n{ e + Tr };
 	
-	float Tx{ R5 * cos(n) };
+	float Tx{ R5 * cosf(n) };
 	
-	float Tz{ R5 * sin(n) };
+	float Tz{ R5 * sinf(n) };
 	
-	float B{ sqrt(((Tx - Sx) * (Tx - Sx)) + ((Tz - Sz) * (Tz - Sz))) };
+	float B{ sqrtf(((Tx - Sx) * (Tx - Sx)) + ((Tz - Sz) * (Tz - Sz))) };
 	
-	float o{ acos(((R1 * R1) + (B * B) - (R2 * R2)) / (2 * R1 * B)) };
+	float o{ acosf(clamp(((R1 * R1) + (B * B) - (R2 * R2)) / (2 * R1 * B))) };
 	
-	float f{ atan2(Tx, Tz) };
+	float f{ atan2f(Tz - Sz, Tx - Sx) };
 	
 	float q{ f + o }; // Servo2 (Top) Angle in Radians
 	

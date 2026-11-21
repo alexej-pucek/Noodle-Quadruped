@@ -14,10 +14,10 @@ float t{stepLength(stepTime)};
 float yz{};
 float z{};*/
 float y{0};
-float P0x{50}; // Step P0 Swing, Stance X-axis
-float P1x{20}; // Step P1 Swing X-axis
-float P2x{0}; // Step P2 Swing X-axis
-float P3x{-30}; // Step P3 Swing, Stance X-axis
+float P0x{60}; // Step P0 Swing, Stance X-axis
+float P1x{15}; // Step P1 Swing X-axis
+float P2x{-5}; // Step P2 Swing X-axis
+float P3x{-50}; // Step P3 Swing, Stance X-axis
 float P0z{140}; // Step P0 Swing Z-axis
 float P1z{120}; // Step P1 Swing Z-axis
 float P2z{120}; // Step P2 Swing Z-axis
@@ -71,9 +71,17 @@ void loop() {
 		SwX = bezierCurve(tB, P0x, P1x, P2x, P3x);
 		SwZ = bezierCurve(tB, P0z, P1z, P2z, P3z);
 		swing = {solveIK(SwX,SwZ, y)};
+		if(swing == false){
+			Serial.println("FALSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+			Serial.print("Swing: ");
+			Serial.print(SwX);
+			Serial.print("   ");
+			Serial.println(SwZ);
+		}
 		if(swing){
+			
 			// Front Right Leg
-			/*Serial.print("Swing: ");
+			Serial.print("Swing: ");
 			Serial.print(SwX);
 			Serial.print("   ");
 			Serial.println(SwZ);
@@ -85,7 +93,8 @@ void loop() {
 			setServoAngle(1,servos.servo2 + 90);
 			Serial.print("Swing Servo3: ");
 			Serial.println(servos.servo3);
-			setServoAngle(2,servos.servo3);*/
+			setServoAngle(2,servos.servo3);
+			
 			// Front Left Leg
 			Serial.print("Swing: ");
 			Serial.print(SwX);
@@ -100,6 +109,39 @@ void loop() {
 			Serial.print("Swing Servo3: ");
 			Serial.println(servos.servo3);
 			setServoAngle(5,servos.servo3);
+
+			// Back Right Leg
+			Serial.print("Swing: ");
+			Serial.print(SwX);
+			Serial.print("   ");
+			Serial.println(SwZ);
+			Serial.print("Swing Servo1: ");
+			Serial.println( 80.0f - servos.servo1);
+			setServoAngle(6, 80.0f - servos.servo1);
+			Serial.print("Swing Servo2: ");
+			Serial.println(servos.servo2 + 90.0f);
+			setServoAngle(7,servos.servo2 + 90);
+			Serial.print("Swing Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(8,servos.servo3);
+
+			// Back Left Leg
+			Serial.print("Swing: ");
+			Serial.print(SwX);
+			Serial.print("   ");
+			Serial.println(SwZ);
+			Serial.print("Swing Servo1: ");
+			Serial.println( 80.0f - servos.servo1);
+			setServoAngle(9, 80.0f - servos.servo1);
+			Serial.print("Swing Servo2: ");
+			Serial.println(servos.servo2 + 90.0f);
+			setServoAngle(10,servos.servo2 + 90);
+			Serial.print("Swing Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(11,servos.servo3);
+
+
+
 		}
 
 	}
@@ -109,9 +151,17 @@ void loop() {
 		StX = linearInterpolation(tI,P3x, P0x);
 		StZ = P0z;
 		stance = {solveIK(StX, StZ, y)};
+		if(stance == false){
+			Serial.println("FALSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+			Serial.print("Stance: ");
+			Serial.print(StX);
+			Serial.print("   ");
+			Serial.println(StZ);
+		}
 		if(stance){
+			
 			// Front Right Leg
-			/*Serial.print("Stance: ");
+			Serial.print("Stance: ");
 			Serial.print(StX);
 			Serial.print("   ");
 			Serial.println(StZ);
@@ -123,7 +173,8 @@ void loop() {
 			setServoAngle(1,servos.servo2 + 90.0f);
 			Serial.print("Stance Servo3: ");
 			Serial.println(servos.servo3);
-			setServoAngle(2,servos.servo3);*/
+			setServoAngle(2,servos.servo3);
+
 			// Front Left Leg
 			Serial.print("Stance: ");
 			Serial.print(StX);
@@ -138,6 +189,36 @@ void loop() {
 			Serial.print("Stance Servo3: ");
 			Serial.println(servos.servo3);
 			setServoAngle(5,servos.servo3);
+
+			// Back Right Leg
+			Serial.print("Stance: ");
+			Serial.print(StX);
+			Serial.print("   ");
+			Serial.println(StZ);
+			Serial.print("Stance Servo1: ");
+			Serial.println(200.0f - servos.servo1);
+			setServoAngle(6, 200.0f - servos.servo1);
+			Serial.print("Stance Servo2: ");
+			Serial.println( 90.0f - servos.servo2);
+			setServoAngle(7, 90.0f - servos.servo2);
+			Serial.print("Stance Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(8,servos.servo3);
+
+			// Back Left Leg
+			Serial.print("Stance: ");
+			Serial.print(StX);
+			Serial.print("   ");
+			Serial.println(StZ);
+			Serial.print("Stance Servo1: ");
+			Serial.println(200.0f - servos.servo1);
+			setServoAngle(9, 200.0f - servos.servo1);
+			Serial.print("Stance Servo2: ");
+			Serial.println( 90.0f - servos.servo2);
+			setServoAngle(10, 90.0f - servos.servo2);
+			Serial.print("Stance Servo3: ");
+			Serial.println(servos.servo3);
+			setServoAngle(11,servos.servo3);
 		}
 	}
 }

@@ -15,3 +15,4 @@ extern bool stance;
 void setServoAngle(uint8_t channel, int angle);
 float radToDeg(float rad);
 float readFloat();
+float clamp(float val);

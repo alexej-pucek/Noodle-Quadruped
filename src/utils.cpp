@@ -32,3 +32,13 @@ void setServoAngle(uint8_t channel, int angle){
     int pulse{map(angle, 0, 180, SERVOMIN, SERVOMAX)};
     pwm.setPWM(channel, 0, pulse);
 }
+
+float clamp(float val){
+    if(val > 1.0f){
+        return 1.0f;
+    }
+    if(val < -1.0f){
+        return -1.0f;
+    }
+    return val;
+}
