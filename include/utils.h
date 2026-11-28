@@ -16,3 +16,5 @@ void setServoAngle(uint8_t channel, int angle);
 float radToDeg(float rad);
 float readFloat();
 float clamp(float val);
+float arccosf(float adj1, float adj2, float hyp);
+float sqrf(float a);

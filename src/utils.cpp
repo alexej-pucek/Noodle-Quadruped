@@ -42,3 +42,11 @@ float clamp(float val){
     }
     return val;
 }
+
+float arccosf(float adj1, float adj2, float hyp){
+    return acosf(clamp(((adj1 * adj1) + (adj2 * adj2) - ((hyp) * (hyp))) / (2.0f * adj1 * adj2)));
+}
+
+float sqrf(float a){
+    return (a * a);
+}
